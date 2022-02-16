@@ -19,12 +19,8 @@ import Naverloginimg from './Naverloginimg.png';
 import Kakaologinimg from './Kakaologinimg.png';
 import Kakaologincallback from './Kakaologincallback';
 
-
-
 // ----------------------------------------------------------------------
 export default function LoginForm() {
-  
-
   const { login } = useAuth();
 
   const isMountedRef = useIsMountedRef();
@@ -37,8 +33,8 @@ export default function LoginForm() {
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: 'k@naver.com',
+    password: 'dlcksdud12~',
     remember: true,
   };
 
@@ -66,10 +62,9 @@ export default function LoginForm() {
     }
   };
 
-  const REST_API_KEY = "1e48d31601f5f560eb6da4b6ea35a32b";
-  const REDIRECT_URI = "http://localhost:3000/auth/login";
+  const REST_API_KEY = '1e48d31601f5f560eb6da4b6ea35a32b';
+  const REDIRECT_URI = 'http://localhost:3000/auth/login';
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

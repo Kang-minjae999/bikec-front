@@ -48,16 +48,23 @@ export default function BlogPosts() {
 
   const [posts, setPosts] = useState([]);
 
+  const [pagesize, setpagesize] = useState();
+
   const [filters, setFilters] = useState('latest');
 
   const sortedPosts = applySort(posts, filters);
 
   const getAllPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts/all');
-
+      const accessToken = window.localStorage.getItem('accessToken');
+      const response = await axios.get('/api/board/free?page=0&size=10', {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
       if (isMountedRef.current) {
-        setPosts(response.data.posts);
+        setPosts(response.data.data.content);
+        setpagesize(response.data.data.pageable.pageSize);
       }
     } catch (error) {
       console.error(error);
@@ -79,10 +86,7 @@ export default function BlogPosts() {
       <Container maxWidth={themeStretch ? false : 'lx'}>
         <HeaderBreadcrumbs
           heading="자유"
-          links={[
-            { name: '게시판', href: PATH_DASHBOARD.board.motocycle },
-            { name: '자유' },
-          ]}
+          links={[{ name: '게시판', href: PATH_DASHBOARD.board.motocycle }, { name: '자유' }]}
           action={
             <Button
               variant="contained"
@@ -101,16 +105,11 @@ export default function BlogPosts() {
         </Stack>
 
         <Grid container spacing={3}>
-        {(!posts.length ? [...Array(12)] 
-            : sortedPosts).map((post, index) =>
-            post ? (
-              <Grid key={post.id} item xs={12} sm={12} md={12}>
-                <BlogPostlist post={post}/>
-              </Grid>
-            ) : (
-              <SkeletonboardItem key={index} />
-            )
-          )}
+          {posts.map((post, index) => (
+            <Grid key={post.id} item xs={12} sm={12} md={12}>
+              <BlogPostlist post={post} />
+            </Grid>
+          ))}
         </Grid>
       </Container>
     </Page>

@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
+// import { accessToken } from 'mapbox-gl';
 
 // ----------------------------------------------------------------------
 
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null,
+  user: [],
 };
 
 const handlers = {
@@ -69,12 +70,17 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem('accessToken');
-
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get('/api/account/my-account');
-          const { user } = response.data;
+          // ! /api/userinfo
+          const response = await axios.get('/api/userinfo', {
+            headers: {
+              Authorization: accessToken,
+            },
+          });
+          const user = response.data.data;
+          console.log(user);
 
           dispatch({
             type: 'INITIALIZE',
@@ -108,11 +114,14 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', {
+    // ! /login
+    const response = await axios.post('/login', {
       email,
       password,
     });
-    const {accessToken, user} = response.data;
+    const user = response.data;
+    const accessToken = response.headers.authorization;
+    console.log('response.data', response.data);
     setSession(accessToken);
     dispatch({
       type: 'LOGIN',
@@ -123,7 +132,7 @@ function AuthProvider({ children }) {
   };
 
   const register = async (email, password, username, nickname, birthday, phone, sex, city) => {
-    const response = await axios.post('/api/account/register', {
+    const response = await axios.post('/api/join', {
       email,
       password,
       username,
@@ -144,10 +153,15 @@ function AuthProvider({ children }) {
   };
 
   const logout = async () => {
+    const accessToken = window.localStorage.getItem('accessToken');
+    await axios.get('/api/logout', {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
-
   return (
     <AuthContext.Provider
       value={{
