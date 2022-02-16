@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
 // @mui
-import { Box } from '@mui/material';
+import { Box,Link } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -23,5 +23,5 @@ export default function Logo({ disabledLink = false, sx }) {
     return <>{logo}</>;
   }
 
-  return <RouterLink to="/dashboard/app">{logo}</RouterLink>;
+  return <Link component={RouterLink} to="/dashboard/app" underline="none">{logo}</Link>;
 }

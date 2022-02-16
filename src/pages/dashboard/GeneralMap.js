@@ -1,122 +1,80 @@
-/* global kakao */
-import { React , useEffect, useState } from 'react';
-// @mui
-import { useTheme } from '@mui/material/styles';
-import { Box, CardContent, Container, Grid, Link, Stack, Typography, Alert ,Button} from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import { common } from '@mui/material/colors';
-// icons
-import StorefrontIcon from '@mui/icons-material/Storefront';
-// hooks
-import useAuth from '../../hooks/useAuth';
-import useSettings from '../../hooks/useSettings';
-// components
-import Page from '../../components/Page';
-// sections
-import {
-  Appmapcard,
-  AppWelcome,
-  AppWelcomefirst,
-  AppFeatured,
-  AppWelcomesecond,
-  AppTopAuthors,
-  AppTopRelated,
-  AppAreaInstalled,
-  AppWidgetSummary,
-  AppCurrentDownload,
-  Appcompany,
-  Apppic,
-  AppTopInstalledCountries,
-} from '../../sections/@dashboard/general/app';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { ClusterPositiondata } from "./GeneralMapposition"
+
+const { Container } = require("@mui/material")
+const { useState, useEffect } = require("react")
+const { Map, MapMarker,MarkerClusterer,useMap } = require("react-kakao-maps-sdk")
 
 
 
-// ----------------------------------------------------------------------
+export default function GeneralMap() {
+  const [positions, setPositions] = useState([]);
 
-export default function GeneralApp() {
-  const { user } = useAuth();
-  const theme = useTheme();
-  const { themeStretch } = useSettings();
-  const [open, setopen] = useState(false);
-  const Location =()=>{
-    useEffect(()=>{
-          const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
-          const imageSize = new kakao.maps.Size(64, 69);
-          const imageOption = {offset: new kakao.maps.Point(27, 69)}; 
-          const container = document.getElementById('mapview');
-          const options = {
-            center: new kakao.maps.LatLng(37.37181890649,126.93344241297),
-          };
-          const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-
-          // 윈도우
-          const iwContent = '<div><Appmapcard/>아니이거 왜안돼<div/>';
-          const iwRemoveable = true; 
-          const infowindow = new kakao.maps.InfoWindow({
-            content : iwContent,
-            removable : iwRemoveable
-          }); 
-
-          const mapview = new kakao.maps.Map(container, options);
-          const markerPosition  = new kakao.maps.LatLng(37.37181890649, 126.93344241297); 
-          const marker = new kakao.maps.Marker({
-            map : mapview,
-            position: markerPosition,
-            image: markerImage,
-          });
+  useEffect(() => {
+    setPositions(ClusterPositiondata.positions);
+  },[])
 
 
-        
-
-        marker.setMap(mapview)
-
-        kakao.maps.event.addListener(marker, 'click', () => {
-          infowindow.open(mapview, marker);  
-        });
 
 
-        kakao.maps.event.addListener(mapview, 'click', () => {
-          infowindow.close(mapview, marker);  
-        });
+  const [isVisible, setIsVisible] = useState(false)
 
-        
+  const ClusterContainer = ({positions}) => {
+    // hook를 이용하여 map 객체 참조 합니다.
+    const map = useMap()
 
-        
+    const onClusterclick = (_target, cluster) => {
+        console.log("hello");
+        // 현재 지도 레벨에서 1레벨 확대한 레벨
+        const level = map.getLevel()-1;
 
+        // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+        map.setLevel(level, {anchor: cluster.getCenter()});
+        map.panTo(cluster.getCenter());
+    };
 
-        },[]);
-
-      return (
-          <div>
-            <div id="mapview" style={{height:"70vh"}}>  </div> 
-            {setopen ? <Appmapcard/> : ''}
-          </div>
-      )
+    return (
+      <MarkerClusterer
+        averageCenter ='true' // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel={10} // 클러스터 할 최소 지도 레벨
+        disableClickZoom='true' // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+        // 마커 클러스터러에 클릭이벤트를 등록합니다
+        // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
+        // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
+        onClusterclick={onClusterclick}
+      >
+        {positions.map((pos) => (
+          <MapMarker
+            key={`${pos.lat}-${pos.lng}`}
+            position={{
+              lat: pos.lat,
+              lng: pos.lng,
+            }}
+            onClick={
+              (marker) => map.panTo(marker.getPosition()) +
+              setIsVisible(true) + 
+              console.log(isVisible)}
+          />
+        ))}
+      </MarkerClusterer>
+    )
   }
-  
 
   return (
-    <Page title="General: App">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-      <HeaderBreadcrumbs
-          heading="라이딩 명소"
-          links={[
-            { name: '홈', href: PATH_DASHBOARD.general.app },
-            { name: '라이딩 명소', href: PATH_DASHBOARD.general.app },
-            { name: '지도' },
-          ]}
-        />
-        <Grid container spacing={1}>
-        <Grid item xs={12} md={12}>
-         <Location/>
-            </Grid>
-        </Grid>
-      </Container>
-    </Page>
+    <Map // 지도를 표시할 Container
+        center={{
+          // 지도의 중심좌표
+          lat: 36.2683,
+          lng: 127.6358,
+        }}
+        style={{
+          // 지도의 크기
+          width: "100%",
+          height: "70vh",
+        }}
+        level={13} // 지도의 확대 레벨
+        onClick={()=>setIsVisible(false)}
+      >
+        <ClusterContainer positions={positions} />
+      </Map>
   );
 }
-
-
-

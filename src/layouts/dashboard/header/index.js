@@ -81,11 +81,11 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
           </IconButtonAnimate>
         )}
         <Logo/>
-          <RouterLink to="/dashboard/app">         
+          <Link component={RouterLink} to="/dashboard/app"underline="none" >         
           <Label color="primary" sx={{ ml: 1 , mr: 2}} variant = 'filled'>
             RIDERTOWN
             </Label>
-            </RouterLink>
+            </Link>
 
 
           <Searchbar />
