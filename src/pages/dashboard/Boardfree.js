@@ -2,7 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { Link as RouterLink } from 'react-router-dom';
 import { useEffect, useCallback, useState } from 'react';
 // @mui
-import { Grid, Button, Container, Stack,Pagination  } from '@mui/material';
+import { Grid, Button, Container, Stack, Pagination, Typography } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
@@ -48,28 +48,31 @@ export default function BlogPosts() {
 
   const [posts, setPosts] = useState([]);
 
-  const [totalpage, settotalpage] = useState();
+  const [totalpage, settotalpage] = useState(0);
 
   const [filters, setFilters] = useState('latest');
 
   const sortedPosts = applySort(posts, filters);
 
-  const getAllPosts = useCallback(async () => {
-    try {
-      const accessToken = window.localStorage.getItem('accessToken');
-      const response = await axios.get(`/api/board/free?page=${page}&size=10`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      });
-      if (isMountedRef.current) {
-        setPosts(response.data.data.content);
-        settotalpage(response.data.data.totalPages);
+  const getAllPosts = useCallback(
+    async (page) => {
+      try {
+        const accessToken = window.localStorage.getItem('accessToken');
+        const response = await axios.get(`/api/board/free?page=${page}&size=10`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        if (isMountedRef.current) {
+          setPosts(response.data.data.content);
+          settotalpage(response.data.data.totalPages);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [isMountedRef]);
+    },
+    [isMountedRef]
+  );
 
   useEffect(() => {
     getAllPosts();
@@ -84,9 +87,9 @@ export default function BlogPosts() {
   const [page, setpage] = useState(0);
   const [pagenation, setpagenation] = useState(1);
   const handleChange = (event, value) => {
-    setpagenation(event.target.value);
-    setpage(event.target.value-1);
-    getAllPosts();
+    setpagenation(value);
+    setpage(value - 1);
+    getAllPosts(page);
   };
 
   return (
@@ -119,9 +122,9 @@ export default function BlogPosts() {
             </Grid>
           ))}
           <Stack spacing={1}>
-          <Typography>페이지: {pagenation}</Typography>
-          <Pagination count={totalpage} page={pagenation} onChange={handleChange} />
-        </Stack>
+            <Typography>페이지: {pagenation}</Typography>
+            <Pagination count={totalpage} page={pagenation} onChange={handleChange} />
+          </Stack>
         </Grid>
       </Container>
     </Page>
