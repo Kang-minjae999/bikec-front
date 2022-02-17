@@ -84,8 +84,8 @@ export default function BlogPosts() {
   const [page, setpage] = useState(0);
   const [pagenation, setpagenation] = useState(1);
   const handleChange = (event, value) => {
-    setpagenation(value);
-    setpage(value-1);
+    setpagenation(event.target.value);
+    setpage(event.target.value-1);
     getAllPosts();
   };
 
@@ -119,8 +119,8 @@ export default function BlogPosts() {
             </Grid>
           ))}
           <Stack spacing={1}>
-          <Typography>Page: {page}</Typography>
-          <Pagination count={totalpage} page={page} onChange={handleChange} />
+          <Typography>페이지: {pagenation}</Typography>
+          <Pagination count={totalpage} page={pagenation} onChange={handleChange} />
         </Stack>
         </Grid>
       </Container>
