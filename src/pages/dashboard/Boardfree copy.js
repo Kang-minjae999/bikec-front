@@ -2,7 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { Link as RouterLink } from 'react-router-dom';
 import { useEffect, useCallback, useState } from 'react';
 // @mui
-import { Grid, Button, Container, Stack,Pagination  } from '@mui/material';
+import { Grid, Button, Container, Stack, Pagination, Typography } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';

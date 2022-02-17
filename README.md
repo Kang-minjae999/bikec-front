@@ -42,3 +42,7 @@ Your app is ready to be deployed.
 You can find detailed instructions on using Create React App and many tips in [its documentation](https://facebook.github.io/create-react-app/).
 
 ## ADD By MIN
+
+
+## 추가
+npm i react-intersection-observer
