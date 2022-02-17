@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -87,9 +87,13 @@ export default function BlogNewPostForm() {
     handleSubmit,
     formState: { isSubmitting, isValid },
   } = methods;
+    
+      useEffect(() => {
+        setValue("nickname" ,nickname)
+        console.log(nickname)
+      }, [nickname]);
 
-  setValue("nickname" ,nickname)
-  const values = watch();
+      const values = watch();
 
   const onSubmit = async ({title, description, content, nickname}) => {
     const accessToken = window.localStorage.getItem('accessToken');
@@ -142,12 +146,8 @@ export default function BlogNewPostForm() {
               </Stack>
             </Card>
           </Grid>
-
           <Grid item xs={12} md={4}>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
-                미리보기
-              </Button>
               <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
                 올리기
               </LoadingButton>
@@ -156,14 +156,6 @@ export default function BlogNewPostForm() {
         </Grid>
       </FormProvider>
 
-      <BlogNewPostPreview
-        values={values}
-        isOpen={open}
-        isValid={isValid}
-        isSubmitting={isSubmitting}
-        onClose={handleClosePreview}
-        onSubmit={handleSubmit(onSubmit)}
-      />
     </>
   );
 }
