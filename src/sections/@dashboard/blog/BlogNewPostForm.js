@@ -10,7 +10,9 @@ import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
 import { Grid, Card, Chip, Stack, Button, Typography, Autocomplete } from '@mui/material';
 // routes
+import useAuth from '../../../hooks/useAuth';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import axios from '../../../utils/axios';
 // components
 import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile } from '../../../components/hook-form';
 //
@@ -43,6 +45,9 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function BlogNewPostForm() {
+  const { user } = useAuth()
+  const { nickname } = user;
+  
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -60,20 +65,13 @@ export default function BlogNewPostForm() {
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     content: Yup.string().min(10).required('Content is required'),
-    cover: Yup.mixed().required('Cover is required'),
-    boardtype: Yup.string().min(1,"게시판 타입을 정해주세요").required('Content is required'),
-    tags: Yup.array().min(1,"주제를 한가지 정해주세요.").required('Content is required'),
   });
 
   const defaultValues = {
     title: '',
     description: '',
     content: '',
-    cover: null,
-    tags: '[]',
-    publish: true,
-    comments: true,
-    boardtype: '',
+    nickname: '',
   };
 
   const methods = useForm({
@@ -90,11 +88,19 @@ export default function BlogNewPostForm() {
     formState: { isSubmitting, isValid },
   } = methods;
 
+  setValue("nickname" ,nickname)
   const values = watch();
 
-  const onSubmit = async () => {
+  const onSubmit = async ({title, description, content, nickname}) => {
+    const accessToken = window.localStorage.getItem('accessToken');
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await axios.post('/api/board/free', {
+        headers : {accessToken},
+        title,
+        description,
+        content,
+        nickname,
+      });     
       reset();
       handleClosePreview();
       enqueueSnackbar('Post success!');
@@ -133,73 +139,11 @@ export default function BlogNewPostForm() {
                   <LabelStyle>내용</LabelStyle>
                   <RHFEditor name="content"/>
                 </div>
-                <div>
-                  <LabelStyle>대표사진</LabelStyle>
-                  <RHFUploadSingleFile name="cover" accept="image/*" maxSize={3145728} onDrop={handleDrop} />
-                </div>
               </Stack>
             </Card>
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 3 }}>
-              <Stack spacing={3}>
-                <div>
-                  <RHFSwitch
-                    name="publish"
-                    label="공개여부"
-                    labelPlacement="start"
-                    sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
-
-                  <RHFSwitch
-                    name="comments"
-                    label="덧글 활성화"
-                    labelPlacement="start"
-                    sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
-                </div>
-
-                <Controller
-                  name="boardtype"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={POST_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <RHFTextField name="boardtype" label="게시판" {...params} />}
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="tags"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <RHFTextField name="tags" label="주제" {...params} />}
-                    />
-                  )}
-                />
-
-             
-              </Stack>
-            </Card>
-
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
                 미리보기
