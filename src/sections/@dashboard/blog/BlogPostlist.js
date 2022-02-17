@@ -35,7 +35,7 @@ export default function BlogPostlist({ post }) {
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
         <Grid container>
           <Grid key={post.id} item xs={12} sm={12} md={8}>
-            <PostContent title={title} />
+            <PostContent title={title} id={id}/>
           </Grid>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {/* <Avatar alt={user.nickname} src={author.avatarUrl} /> */}
@@ -88,12 +88,13 @@ export default function BlogPostlist({ post }) {
 PostContent.propTypes = {
   index: PropTypes.number,
   title: PropTypes.string,
+  id: PropTypes.number,
 };
 
-export function PostContent({ title, index }) {
+export function PostContent({ title, index , id}) {
   const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const linkTo = `${PATH_DASHBOARD.board.root}/free/${id}`;
 
   const latestPostLarge = index === 0;
   const latestPostSmall = index === 1 || index === 2;

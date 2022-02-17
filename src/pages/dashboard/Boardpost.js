@@ -31,7 +31,7 @@ export default function Boardpost() {
 
   const isMountedRef = useIsMountedRef();
 
-  const { title } = useParams();
+  const { id } = useParams();
 
   const [recentPosts, setRecentPosts] = useState([]);
 
@@ -41,8 +41,8 @@ export default function Boardpost() {
 
   const getPost = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
+      const response = await axios.get(`/api/board/free/${id}`, {
+        params: { id },
       });
 
       if (isMountedRef.current) {
@@ -52,26 +52,26 @@ export default function Boardpost() {
       console.error(error);
       setError(error.message);
     }
-  }, [isMountedRef, title]);
+  }, [isMountedRef, id]);
 
-  const getRecentPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
+  // const getRecentPosts = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get('/api/blog/posts/recent', {
+  //       params: { title },
+  //     });
 
-      if (isMountedRef.current) {
-        setRecentPosts(response.data.recentPosts);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [isMountedRef, title]);
+  //     if (isMountedRef.current) {
+  //       setRecentPosts(response.data.recentPosts);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, [isMountedRef, title]);
 
   useEffect(() => {
     getPost();
-    getRecentPosts();
-  }, [getRecentPosts, getPost]);
+    // getRecentPosts();
+  }, [getPost]);
 
   return (
     <Page title="Blog: Post Details">
@@ -81,7 +81,7 @@ export default function Boardpost() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: sentenceCase(title) },
+            { name: sentenceCase(post.title) },
           ]}
         />
 
@@ -96,20 +96,20 @@ export default function Boardpost() {
 
               <Markdown children={post.body} />
 
-              <Box sx={{ my: 5 }}>
+              {/* <Box sx={{ my: 5 }}>
                 <Divider />
                 <BlogPostTags post={post} />
                 <Divider />
-              </Box>
+              </Box> */}
 
-              <Box sx={{ display: 'flex', mb: 2 }}>
+              {/* <Box sx={{ display: 'flex', mb: 2 }}>
                 <Typography variant="h4">Comments</Typography>
                 <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
                   ({post.comments.length})
                 </Typography>
-              </Box>
-
-              <BlogPostCommentList post={post} />
+              </Box> */}
+{/* 
+              <BlogPostCommentList post={post} /> */}
 
               <Box sx={{ mb: 5, mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                 <Pagination count={8} color="primary" />
@@ -124,7 +124,7 @@ export default function Boardpost() {
 
         {error && <Typography variant="h6">404 {error}!</Typography>}
 
-        <BlogPostRecent posts={recentPosts} />
+        {/* <BlogPostRecent posts={recentPosts} /> */}
       </Container>
     </Page>
   );

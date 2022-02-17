@@ -91,7 +91,7 @@ export default function BlogNewPostForm() {
       useEffect(() => {
         setValue("nickname" ,nickname)
         console.log(nickname)
-      }, [nickname]);
+      }, [setValue,nickname]);
 
       const values = watch();
 
@@ -99,7 +99,9 @@ export default function BlogNewPostForm() {
     const accessToken = window.localStorage.getItem('accessToken');
     try {
       await axios.post('/api/board/free', {
-        headers : {accessToken},
+        headers : {
+          accessToken
+        },
         title,
         description,
         content,

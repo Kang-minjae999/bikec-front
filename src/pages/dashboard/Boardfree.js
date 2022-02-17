@@ -86,11 +86,12 @@ export default function BlogPosts() {
 
   const [page, setpage] = useState(0);
   const [pagenation, setpagenation] = useState(1);
-  const handleChange = (event, value) => {
+
+  const handleChange = useCallback((event, value) => {
     setpagenation(value);
     setpage(value - 1);
     getAllPosts(page);
-  };
+  },[getAllPosts , page]);
 
   return (
     <Page title="Blog: Posts">
@@ -116,7 +117,7 @@ export default function BlogPosts() {
         </Stack>
 
         <Grid container spacing={3}>
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <Grid key={post.id} item xs={12} sm={12} md={12}>
               <BlogPostlist post={post} />
             </Grid>
