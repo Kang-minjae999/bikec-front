@@ -20,21 +20,9 @@ import BlogNewPostPreview from './BlogNewPostPreview';
 
 // ----------------------------------------------------------------------
 
+const POST_OPTION = ['바이크 소식/기사', '바이크 정보', '바이크 튜닝/정비 정보', '더 추가할 예정'];
 
-const POST_OPTION = [
-  '바이크 소식/기사',
-  '바이크 정보',
-  '바이크 튜닝/정비 정보',
-  '더 추가할 예정',
-];
-
-const TAGS_OPTION = [
-  '바이크 신차 정보',
-  '바이크 단종차 정보',
-  '바이크 할인',
-  '더 추가할 예정'
-];
-
+const TAGS_OPTION = ['바이크 신차 정보', '바이크 단종차 정보', '바이크 할인', '더 추가할 예정'];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -45,9 +33,9 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function BlogNewPostForm() {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const { nickname } = user;
-  
+
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -87,26 +75,26 @@ export default function BlogNewPostForm() {
     handleSubmit,
     formState: { isSubmitting, isValid },
   } = methods;
-    
-      useEffect(() => {
-        setValue("nickname" ,nickname)
-        console.log(nickname)
-      }, [setValue,nickname]);
 
-      const values = watch();
+  useEffect(() => {
+    setValue('nickname', nickname);
+    console.log(nickname);
+  }, [setValue, nickname]);
 
-  const onSubmit = async ({title, description, content, nickname}) => {
+  const values = watch();
+
+  const onSubmit = async ({ title, description, content, nickname }) => {
     const accessToken = window.localStorage.getItem('accessToken');
     try {
       await axios.post('/api/board/free', {
-        headers : {
-          accessToken
+        headers: {
+          Authorization: accessToken,
         },
         title,
         description,
         content,
         nickname,
-      });     
+      });
       reset();
       handleClosePreview();
       enqueueSnackbar('Post success!');
@@ -132,7 +120,6 @@ export default function BlogNewPostForm() {
     [setValue]
   );
 
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -143,7 +130,7 @@ export default function BlogNewPostForm() {
                 <RHFTextField name="title" label="제목" />
                 <div>
                   <LabelStyle>내용</LabelStyle>
-                  <RHFEditor name="content"/>
+                  <RHFEditor name="content" />
                 </div>
               </Stack>
             </Card>
@@ -157,8 +144,6 @@ export default function BlogNewPostForm() {
           </Grid>
         </Grid>
       </FormProvider>
-
     </>
   );
 }
-
