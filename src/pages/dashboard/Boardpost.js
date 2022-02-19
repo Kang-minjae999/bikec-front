@@ -46,7 +46,7 @@ export default function Boardpost() {
       });
 
       if (isMountedRef.current) {
-        setPost(response.data.post);
+        setPost(response.data.data);
       }
     } catch (error) {
       console.error(error);
@@ -90,11 +90,11 @@ export default function Boardpost() {
               <BlogPostHero post={post} />
                 <Divider/>
               <Box sx={{ p: { xs: 3, md: 5 }}}>
-              <Typography variant="h6" sx={{ mb: 5 }}>
-                {post.description}
-              </Typography>
+                {/*   <Typography variant="h6" sx={{ mb: 5 }}>
+                            {post.description}
+                    </Typography>  */}
 
-              <Markdown children={post.body} />
+              <Markdown children={post.content} />
 
               {/* <Box sx={{ my: 5 }}>
                 <Divider />
@@ -108,14 +108,13 @@ export default function Boardpost() {
                   ({post.comments.length})
                 </Typography>
               </Box> */}
-{/* 
-              <BlogPostCommentList post={post} /> */}
+              {/*  <BlogPostCommentList post={post} /> */}
 
               <Box sx={{ mb: 5, mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                 <Pagination count={8} color="primary" />
               </Box>
 
-              <BlogPostCommentForm />
+            {/*   <BlogPostCommentForm /> */}
             </Box>
           </Card>
         )}

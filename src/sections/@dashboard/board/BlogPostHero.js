@@ -13,8 +13,8 @@ BlogPostHero.propTypes = {
 };
 
 export default function BlogPostHero({ post }) {
-  const { title, author, createdAt } = post;
-
+  const { title } = post;
+ /*  , author, createdAt */
   return (
       <Stack
         direction="column"
@@ -25,7 +25,7 @@ export default function BlogPostHero({ post }) {
       <Typography variant="h3" sx={{ color: 'primary', mt:2 , ml:2, mr:2} }>
       {title}
       </Typography>
-      <Stack
+     {/* <Stack
             direction="row-reverse"
             justifyContent="space-between"
             alignItems="center"
@@ -41,8 +41,8 @@ export default function BlogPostHero({ post }) {
               {fyeardateTime(createdAt)}
             </Typography>
           </Box>
-        </Box>
-        </Stack>
+        </Box> 
+        </Stack> */}
         </Stack>
   );
 }
