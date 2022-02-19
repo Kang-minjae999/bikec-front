@@ -57,7 +57,6 @@ export default function BlogNewPostForm() {
 
   const defaultValues = {
     title: '',
-    description: '',
     content: '',
     nickname: '',
   };
@@ -83,7 +82,7 @@ export default function BlogNewPostForm() {
 
   const values = watch();
 
-  const onSubmit = async ({ title, description, content, nickname }) => {
+  const onSubmit = async ({ title, content, nickname }) => {
     const accessToken = window.localStorage.getItem('accessToken');
     try {
       await axios.post('/api/board/free', {
@@ -91,7 +90,6 @@ export default function BlogNewPostForm() {
           Authorization: accessToken,
         },
         title,
-        description,
         content,
         nickname,
       });
@@ -99,7 +97,7 @@ export default function BlogNewPostForm() {
       handleClosePreview();
       enqueueSnackbar('Post success!');
       navigate(PATH_DASHBOARD.board.free);
-      
+
     } catch (error) {
       console.error(error);
     }

@@ -46,7 +46,7 @@ export default function Boardpost() {
       });
 
       if (isMountedRef.current) {
-        setPost(response.data.data);
+        setPost(response.data.data); 
       }
     } catch (error) {
       console.error(error);
@@ -72,6 +72,7 @@ export default function Boardpost() {
     getPost();
     // getRecentPosts();
   }, [getPost]);
+
 
   return (
     <Page title="Blog: Post Details">
