@@ -5,6 +5,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { FormHelperText } from '@mui/material';
 //
 import Editor from '../editor';
+import EditorComponent from '../editor/EditorComponent';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +21,7 @@ export default function RHFEditor({ name, ...other }) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <Editor
+        <EditorComponent
           id={name}
           value={field.value}
           onChange={field.onChange}

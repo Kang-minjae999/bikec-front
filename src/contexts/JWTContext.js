@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
-// import { accessToken } from 'mapbox-gl';
 
 // ----------------------------------------------------------------------
 
