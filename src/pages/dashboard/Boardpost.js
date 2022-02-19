@@ -35,18 +35,24 @@ export default function Boardpost() {
 
   const [recentPosts, setRecentPosts] = useState([]);
 
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState({
+    title: '',
+    content: '',
+    id: 0,
+    user: {
+      email: '',
+      nickname: '',
+    },
+  });
 
   const [error, setError] = useState(null);
 
   const getPost = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/board/free/${id}`, {
-        params: { id },
-      });
+      const response = await axios.get(`/api/board/free/${id}`);
 
       if (isMountedRef.current) {
-        setPost(response.data.data); 
+        setPost(response.data.data);
       }
     } catch (error) {
       console.error(error);
@@ -72,8 +78,6 @@ export default function Boardpost() {
     getPost();
     // getRecentPosts();
   }, [getPost]);
-
-
   return (
     <Page title="Blog: Post Details">
       <Container maxWidth={themeStretch ? false : 'lx'}>
@@ -82,16 +86,16 @@ export default function Boardpost() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: sentenceCase(post.title) },
+            { name: '게시글' },
           ]}
         />
 
         {post && (
           <Card>
-              <BlogPostHero post={post} />
-                <Divider/>
-              <Box sx={{ p: { xs: 3, md: 5 }}}>
-                {/*   <Typography variant="h6" sx={{ mb: 5 }}>
+            <BlogPostHero post={post} />
+            <Divider />
+            <Box sx={{ p: { xs: 3, md: 5 } }}>
+              {/*   <Typography variant="h6" sx={{ mb: 5 }}>
                             {post.description}
                     </Typography>  */}
 
@@ -115,7 +119,7 @@ export default function Boardpost() {
                 <Pagination count={8} color="primary" />
               </Box>
 
-            {/*   <BlogPostCommentForm /> */}
+              {/*   <BlogPostCommentForm /> */}
             </Box>
           </Card>
         )}

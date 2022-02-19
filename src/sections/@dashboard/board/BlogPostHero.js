@@ -5,7 +5,6 @@ import { Box, Avatar, Typography, Stack } from '@mui/material';
 // utils
 import { fyeardateTime } from '../../../utils/formatTime';
 
-
 // ----------------------------------------------------------------------
 
 BlogPostHero.propTypes = {
@@ -14,18 +13,13 @@ BlogPostHero.propTypes = {
 
 export default function BlogPostHero({ post }) {
   const { title } = post;
- /*  , author, createdAt */
+  /*  , author, createdAt */
   return (
-      <Stack
-        direction="column"
-        justifyContent="space-between"
-        alignItems="center"
-        spacing={2}
-      >
-      <Typography variant="h3" sx={{ color: 'primary', mt:2 , ml:2, mr:2} }>
-      {title}
+    <Stack direction="column" justifyContent="space-between" alignItems="center" spacing={2}>
+      <Typography variant="h3" sx={{ color: 'primary', mt: 2, ml: 2, mr: 2 }}>
+        {title}
       </Typography>
-     {/* <Stack
+      {/* <Stack
             direction="row-reverse"
             justifyContent="space-between"
             alignItems="center"
@@ -43,10 +37,9 @@ export default function BlogPostHero({ post }) {
           </Box>
         </Box> 
         </Stack> */}
-        </Stack>
+    </Stack>
   );
 }
-
 
 /*         <SpeedDial
           direction={isDesktop ? 'left' : 'up'}
