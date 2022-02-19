@@ -57,7 +57,8 @@ export default function Editor({
   sx,
   ...other
 }) {
-  const modules = useMemo(() => {
+  
+/*   const modules = useMemo(() => {
     return {
       toolbar: {
         container: [
@@ -71,7 +72,7 @@ export default function Editor({
         },
       },
     };
-  }, []);
+  }, []); */
 
   const quillRef = useRef();
 
@@ -120,12 +121,13 @@ export default function Editor({
     });
   };
 
-/*   const modules = {
+  const modules = {
     toolbar: {
       container: `#${id}`,
       handlers: {
         undo: undoChange,
         redo: redoChange,
+        image: imageHandler,
       },
     },
     history: {
@@ -137,7 +139,7 @@ export default function Editor({
     clipboard: {
       matchVisual: false,
     },
-  }; */
+  }; 
 
   return (
     <div>

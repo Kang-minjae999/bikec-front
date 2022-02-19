@@ -137,7 +137,7 @@ const RootStyle = styled(Box)(({ theme }) => ({
 
 
 
-export const EditorComponent = () => {
+export default function EditorComponent() {
   const QuillRef = useRef(ReactQuill);
   const [contents, setContents] = useState("");
   const [url , seturl] = useState('');
@@ -237,4 +237,5 @@ return (
        </RootStyle >
 	</>
 )}
+
 
