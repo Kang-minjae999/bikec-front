@@ -98,7 +98,8 @@ export default function BlogNewPostForm() {
       reset();
       handleClosePreview();
       enqueueSnackbar('Post success!');
-      navigate(PATH_DASHBOARD.blog.posts);
+      navigate(PATH_DASHBOARD.board.free);
+      
     } catch (error) {
       console.error(error);
     }
