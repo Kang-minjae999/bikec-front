@@ -80,7 +80,7 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
         <div className="ql-formats">
           {!isSimple && (
             <select className="ql-font" defaultValue="">
-              <option value="">글씨체</option>
+              <option value="">Font</option>
               {FONT_FAMILY.map((font) => (
                 <option key={font} value={font}>
                   {font}
@@ -105,7 +105,7 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
                 {heading}
               </option>
             ))}
-            <option value="">normal</option>
+            <option value="">Normal</option>
           </select>
         </div>
 
@@ -154,22 +154,6 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
           <button type="button" className="ql-image" />
           <button type="button" className="ql-video" />
         </div>
-
-        <div className="ql-formats">
-          {!isSimple && <button type="button" className="ql-formula" />}
-          <button type="button" className="ql-clean" />
-        </div>
-
-        {!isSimple && (
-          <div className="ql-formats">
-            <button type="button" className="ql-undo">
-              <Iconify icon={'ic:round-undo'} width={18} height={18} />
-            </button>
-            <button type="button" className="ql-redo">
-              <Iconify icon={'ic:round-redo'} width={18} height={18} />
-            </button>
-          </div>
-        )}
       </div>
     </EditorToolbarStyle>
   );

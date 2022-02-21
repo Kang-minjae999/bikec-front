@@ -5,8 +5,42 @@ import 'react-quill/dist/quill.snow.css';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 // ------------------------------------------
+// import multer from 'multer';
 import axios from '../../utils/axios';
 // ----------------------------------------------------------------------
+
+// multer 설정
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     // 저장할 장소
+//     destination(req, file, cb) {
+//       cb(null, 'public/uploads');
+//     },
+//     // 저장할 이미지의 파일명
+//     filename(req, file, cb) {
+//       const ext = extname(file.originalname); // 파일의 확장자
+//       console.log('file.originalname', file.originalname);
+//       // 파일명이 절대 겹치지 않도록 해줘야한다.
+//       // 파일이름 + 현재시간밀리초 + 파일확장자명
+//       cb(null, basename(file.originalname, ext) + Date.now() + ext);
+//     },
+//   }),
+//   // limits: { fileSize: 5 * 1024 * 1024 } // 파일 크기 제한
+// });
+// 하나의 이미지 파일만 가져온다.
+// const app = () => {
+//   app.post('/img', upload.single('img'), (req, res) => {
+//     // 해당 라우터가 정상적으로 작동하면 public/uploads에 이미지가 업로드된다.
+//     // 업로드된 이미지의 URL 경로를 프론트엔드로 반환한다.
+//     console.log('전달받은 파일', req.file);
+//     console.log('저장된 파일의 이름', req.file.filename);
+
+//     // 파일이 저장된 경로를 클라이언트에게 반환해준다.
+//     const IMG_URL = `http://localhost:3000/uploads/${req.file.filename}`;
+//     console.log(IMG_URL);
+//     res.json({ url: IMG_URL });
+//   });
+// };
 
 const RootStyle = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -127,7 +161,16 @@ const RootStyle = styled(Box)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function EditorComponent() {
+export default function EditorComponent({
+  id = 'minimal-quill',
+  error,
+  value,
+  onChange,
+  simple = false,
+  helperText,
+  sx,
+  ...other
+}) {
   const QuillRef = useRef(ReactQuill);
   const [contents, setContents] = useState('');
   const [url, seturl] = useState('');
@@ -135,30 +178,34 @@ export default function EditorComponent() {
   // 이미지를 업로드 하기 위한 함수
   const imageHandler = () => {
     const accessToken = window.localStorage.getItem('accessToken');
-
+    // const form = document.createElement('form');
+    // form.setAttribute('enctype', 'multipart/form-data');
     const input = document.createElement('input');
-    const imageFile = new FormData();
 
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
+    input.setAttribute('accept', '*/*');
+    input.setAttribute('name', 'imageFile');
+    // input.setAttribute('processData', false);
+    // input.setAttribute('contentType', false);
     input.click();
 
     input.onchange = async () => {
-      const file = input.files;
-      if (file !== null) {
-        imageFile.append('image', file[0]);
+      const file = input.files[0];
 
+      const formData = new FormData();
+      formData.append('imageFile', file);
+      if (file !== null) {
         try {
-          const response = await axios.post('/api/s3/image', {
+          const response = await axios.post('/api/s3/image', formData, {
             headers: {
+              'content-type': 'multipart/form-data',
               Authorization: accessToken,
-              'content-type':"multipart/form-data",
             },
-            imageFile,
-            
           });
 
+          console.log(response.data.data);
           seturl(response.data.data);
+
 
           const range = QuillRef.current?.getEditor().getSelection()?.index;
           if (range !== null && range !== undefined) {
@@ -166,7 +213,7 @@ export default function EditorComponent() {
 
             quill?.setSelection(range, 1);
 
-            quill?.clipboard.dangerouslyPasteHTML(range, `<img src=${url} alt=${url} />`);
+            quill?.clipboard.dangerouslyPasteHTML(range, `<img src=${url} alt='as' />`);
           }
 
           return { ...response, success: true };
@@ -205,8 +252,8 @@ export default function EditorComponent() {
               QuillRef.current = element;
             }
           }}
-          value={contents}
-          onChange={setContents}
+          value={value}
+          onChange={onchange}
           modules={modules}
           placeholder="내용을 입력해주세요."
         />
