@@ -87,9 +87,9 @@ export default function Editor({
               Authorization: accessToken,
             },
           });
-
           console.log(response.data.data);
           seturl(response.data.data);
+          const url2 = response.data.data
 
           // console.log(seturl);
 
@@ -99,7 +99,7 @@ export default function Editor({
 
             quill?.setSelection(range, 1);
 
-            quill?.clipboard.dangerouslyPasteHTML(range, `<img src=${url} alt='asas' />`);
+            quill?.clipboard.dangerouslyPasteHTML(range, `<img src=${url2} alt='asas' />`);
           }
 
           return { ...response, success: true };
