@@ -116,7 +116,7 @@ export default function Editor({
     toolbar: {
       container: `#${id}`,
       handlers: {
-        imgae: imageHandler
+        image: imageHandler
       },
     },
     history: {
