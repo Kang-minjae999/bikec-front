@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import { useState, React } from 'react';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,6 +19,7 @@ import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hoo
 import Regicheck1 from './Rescheck1';
 import Regicheck2 from './Rescheck2';
 import Regicheck3 from './Rescheck3';
+import { PATH_AUTH } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +34,7 @@ export default function RegisterForm() {
     email: Yup.string().email('유효한 이메일 주소를 입력해주세요.')
                        .required('이메일을 입력해주세요.'),
     password: Yup.string().required('비밀번호를 입력해주세요.')
-                          .matches(/^(?=.*[a-z])(?=.*\d)(?=.*[0-9])(?=.*[@$!%*#?&])[a-z\d@$!%*#?&]{8,}$/,"최소 8자 이상으로 특수문자, 숫자를 최소 한개씩 포함해야 합니다.")
+                          .matches(/^(?=.*[a-z])(?=.*\d)(?=.*[0-9])(?=.*[~!@#$%^&*()_+-=])[a-z\d~!@#$%^&*()_+-=]{8,}$/,"최소 8자 이상으로 특수문자, 숫자를 최소 한개씩 포함해야 합니다.")
                           .min(8, '비밀번호는 최소 8자 이상입니다.'),
     password2: Yup.string().required('비밀번호를 입력해주세요.')
                            .oneOf(([Yup.ref('password'),null]),('비밀번호가 일치하지 않습니다.')),
@@ -144,6 +147,8 @@ export default function RegisterForm() {
     padding: '7px',
   };
 // 다음 주소 끝
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async (data) => {
     try {
@@ -156,6 +161,8 @@ export default function RegisterForm() {
         data.phone,
         data.sex,
         data.address);
+        enqueueSnackbar('가입완료!');
+        navigate(PATH_AUTH.login);
     } catch (error) {
       console.error(error);
       reset();
