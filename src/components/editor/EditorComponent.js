@@ -152,8 +152,10 @@ export default function EditorComponent() {
           const response = await axios.post('/api/s3/image', {
             headers: {
               Authorization: accessToken,
+              'content-type':"multipart/form-data",
             },
             imageFile,
+            
           });
 
           seturl(response.data.data);
