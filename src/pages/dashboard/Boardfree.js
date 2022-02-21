@@ -56,25 +56,22 @@ export default function BlogPosts() {
 
   const [page, setpage] = useState(0);
 
-  const getAllPosts = useCallback(
-    async () => {
-      try {
-        const accessToken = window.localStorage.getItem('accessToken');
-        const response = await axios.get(`/api/board/free?page=${page}&size=10`, {
-          headers: {
-            Authorization: accessToken,
-          },
-        });
-        if (isMountedRef.current) {
-          setPosts(response.data.data.content);
-          settotalpage(response.data.data.totalPages);
-        }
-      } catch (error) {
-        console.error(error);
+  const getAllPosts = useCallback(async () => {
+    try {
+      const accessToken = window.localStorage.getItem('accessToken');
+      const response = await axios.get(`/api/board/free?page=${page}&size=10`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+      if (isMountedRef.current) {
+        setPosts(response.data.data.content);
+        settotalpage(response.data.data.totalPages);
       }
-    },
-    [isMountedRef,page]
-  );
+    } catch (error) {
+      console.error(error);
+    }
+  }, [isMountedRef, page]);
 
   useEffect(() => {
     getAllPosts();
@@ -88,11 +85,14 @@ export default function BlogPosts() {
 
   const [pagenation, setpagenation] = useState(1);
 
-  const handleChange = useCallback((event, value) => {
-    setpagenation(value);
-    setpage(value - 1);
-    getAllPosts(page);
-  },[getAllPosts , page]);
+  const handleChange = useCallback(
+    (event, value) => {
+      setpagenation(value);
+      setpage(value - 1);
+      getAllPosts(page);
+    },
+    [getAllPosts, page]
+  );
 
   return (
     <Page title="Blog: Posts">
