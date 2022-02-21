@@ -33,8 +33,8 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function BlogNewPostForm() {
-  const { user } = useAuth();
-  const { nickname } = user;
+/*   const { user } = useAuth();
+  const { nickname } = user; */
 
   const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ export default function BlogNewPostForm() {
   const defaultValues = {
     title: '',
     content: '',
-    nickname: '',
+    nickname: 'ㄴㄴㄴ',
   };
 
   const methods = useForm({
@@ -75,10 +75,10 @@ export default function BlogNewPostForm() {
     formState: { isSubmitting, isValid },
   } = methods;
 
-  useEffect(() => {
+/*   useEffect(() => {
     setValue('nickname', nickname);
     console.log(nickname);
-  }, [setValue, nickname]);
+  }, [setValue, nickname]); */
 
   const values = watch();
 
