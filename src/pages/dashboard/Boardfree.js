@@ -73,7 +73,7 @@ export default function BlogPosts() {
         console.error(error);
       }
     },
-    [isMountedRef]
+    [isMountedRef,page]
   );
 
   useEffect(() => {
