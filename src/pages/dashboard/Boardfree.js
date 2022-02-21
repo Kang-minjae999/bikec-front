@@ -54,8 +54,10 @@ export default function BlogPosts() {
 
   const sortedPosts = applySort(posts, filters);
 
+  const [page, setpage] = useState(0);
+
   const getAllPosts = useCallback(
-    async (page) => {
+    async () => {
       try {
         const accessToken = window.localStorage.getItem('accessToken');
         const response = await axios.get(`/api/board/free?page=${page}&size=10`, {
@@ -84,7 +86,6 @@ export default function BlogPosts() {
     }
   };
 
-  const [page, setpage] = useState(0);
   const [pagenation, setpagenation] = useState(1);
 
   const handleChange = useCallback((event, value) => {

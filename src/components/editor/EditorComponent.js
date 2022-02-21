@@ -1,19 +1,11 @@
 import { useRef, useState, useMemo } from "react";
-import axios from 'axios';
-
-// 이렇게 라이브러리를 불러와서 사용하면 됩니다
-
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+// ------------------------------------------
 import { styled } from '@mui/material/styles';
 import { Box } from "@mui/material";
-
-import EditorToolbarStyle from "./EditorToolbarStyle";
-import EditorToolbar from "./EditorToolbar";
-
-
-
-
+// ------------------------------------------
+import axios from '../../utils/axios';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Box)(({ theme }) => ({
@@ -141,9 +133,10 @@ export default function EditorComponent() {
   const QuillRef = useRef(ReactQuill);
   const [contents, setContents] = useState("");
   const [url , seturl] = useState('');
+
   // 이미지를 업로드 하기 위한 함수
   const imageHandler = () => {
-  	// 파일을 업로드 하기 위한 input 태그 생성
+    const accessToken = window.localStorage.getItem('accessToken')
     const input = document.createElement("input");
     const imageFiles = new FormData();
 
@@ -151,28 +144,23 @@ export default function EditorComponent() {
     input.setAttribute("accept", "image/*");
     input.click();
 
-	// 파일이 input 태그에 담기면 실행 될 함수 
     input.onchange = async () => {
-      const accessToken = window.localStorage.getItem('accessToken')
       const file = input.files;
       if (file !== null) {
         imageFiles.append("image", file[0]);
 
-	// 저의 경우 파일 이미지를 서버에 저장했기 때문에
-  // 백엔드 개발자분과 통신을 통해 이미지를 저장하고 불러왔습니다.
         try {
-          const res = await axios.post('http://localhost:8080/api/board/free/image' , {
-            headers: {
-              accessToken
+          const response = await axios.post('/api/image' , {
+          headers: {
+           Authorization: accessToken
           },
            imageFiles
           })
 
-	// 백엔드 개발자 분이 통신 성공시에 보내주는 이미지 url을 변수에 담는다.
-         seturl(res.data.url)
 
-	// 커서의 위치를 알고 해당 위치에 이미지 태그를 넣어주는 코드 
-  // 해당 DOM의 데이터가 필요하기에 useRef를 사용한다.
+         seturl(response.data.imageUrl)
+
+
           const range = QuillRef.current?.getEditor().getSelection()?.index;
           if (range !== null && range !== undefined) {
             const quill = QuillRef.current?.getEditor();
@@ -181,23 +169,24 @@ export default function EditorComponent() {
 
             quill?.clipboard.dangerouslyPasteHTML(
               range,
-              `<img src=${url} alt="이미지 태그가 삽입됩니다." />`
+              `<img src=${url} alt=${url} />`
             );
           }
 
-          return { ...res, success: true };
+          return { ...response, success: true };
+
         } catch (error) {
           const err = error ;
           return { ...err.response, success: false };
         }
       }
+      return {
+        
+      };
     };
   };
 
-// quill에서 사용할 모듈을 설정하는 코드 입니다.
-// 원하는 설정을 사용하면 되는데, 저는 아래와 같이 사용했습니다.
-// useMemo를 사용하지 않으면, 키를 입력할 때마다, imageHandler 때문에 focus가 계속 풀리게 됩니다.
-const modules = useMemo(
+  const modules = useMemo(
     () => ({
       toolbar: {
         container: [
