@@ -40,7 +40,6 @@ const HeaderStyle = styled('header')(({ theme }) => ({
   },
 }));
 
-
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
@@ -62,19 +61,12 @@ export default function Register() {
     <Page title="회원가입">
       <RootStyle>
         <HeaderStyle>
-        <Stack 
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center" 
-        spacing={1}>
-        <Logo sx={{ mb: 0.5 }}/>
-          <Label 
-          sx={{ mt: 0.5 }}
-          color="primary" 
-          variant = 'filled'>
-            RIDERTOWN
-          </Label>
-        </Stack>
+          <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
+            <Logo sx={{ mb: 0.5 }} />
+            <Label sx={{ mt: 0.5 }} color="primary" variant="filled">
+              RIDERTOWN
+            </Label>
+          </Stack>
           {smUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
               이미 계정이 있으신가요?{' '}
@@ -84,7 +76,6 @@ export default function Register() {
             </Typography>
           )}
         </HeaderStyle>
-
 
         <Container>
           <ContentStyle>
@@ -97,14 +88,10 @@ export default function Register() {
               </Box>
               <Tooltip title={capitalCase(method)}>
                 <>
-                <SportsMotorsportsTwoToneIcon
-                    color = "primary"
-                    sx={{ width: 40, height: 40 }}
-                  />
+                  <SportsMotorsportsTwoToneIcon color="primary" sx={{ width: 40, height: 40 }} />
                 </>
               </Tooltip>
             </Box>
-
             <RegisterForm />
 
             {!smUp && (
@@ -121,7 +108,6 @@ export default function Register() {
     </Page>
   );
 }
-
 
 /*  \
 
@@ -150,4 +136,4 @@ const SectionStyle = styled(Card)(({ theme }) => ({
             />
           </SectionStyle>
         )}
-*/ 
+*/
