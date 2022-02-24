@@ -89,7 +89,7 @@ export default function RegisterForm() {
     sex: '',
     address: {
       address: '',
-      detailAddress: '',
+      detailaddress: '',
       zipcode: '',
     },
     resisteragree1: false,
