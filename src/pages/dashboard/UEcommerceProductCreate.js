@@ -23,9 +23,9 @@ export default function EcommerceProductCreate() {
   const { pathname } = useLocation();
   const { name } = useParams();
 /*   const { products } = useSelector((state) => state.product); */
-  const isEdit = pathname.includes('edit');/* 
-  const currentProduct = products.find((product) => paramCase(product.name) === name); */
-
+  const isEdit = pathname.includes('edit');
+/*   const currentProduct = products.find((product) => paramCase(product.name) === name); */
+  const currentProduct = [];
 /*   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]); */
@@ -45,7 +45,7 @@ export default function EcommerceProductCreate() {
           ]}
         />
 
-        <UProductNewForm /* isEdit={isEdit} currentProduct={currentProduct}  *//>
+        <UProductNewForm isEdit={isEdit} currentProduct={currentProduct} />
       </Container>
     </Page>
   );
