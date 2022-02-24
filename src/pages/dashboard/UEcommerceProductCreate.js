@@ -19,16 +19,16 @@ import UProductNewForm from '../../sections/@dashboard/e-commerce/UProductNewFor
 
 export default function EcommerceProductCreate() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
+/*   const dispatch = useDispatch(); */
   const { pathname } = useLocation();
   const { name } = useParams();
-  const { products } = useSelector((state) => state.product);
-  const isEdit = pathname.includes('edit');
-  const currentProduct = products.find((product) => paramCase(product.name) === name);
+/*   const { products } = useSelector((state) => state.product); */
+  const isEdit = pathname.includes('edit');/* 
+  const currentProduct = products.find((product) => paramCase(product.name) === name); */
 
-  useEffect(() => {
+/*   useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch]);
+  }, [dispatch]); */
 
   return (
     <Page title="중고거래 / 새 상품 올리기">
@@ -45,7 +45,7 @@ export default function EcommerceProductCreate() {
           ]}
         />
 
-        <UProductNewForm isEdit={isEdit} currentProduct={currentProduct} />
+        <UProductNewForm /* isEdit={isEdit} currentProduct={currentProduct}  *//>
       </Container>
     </Page>
   );

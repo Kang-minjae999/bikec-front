@@ -96,17 +96,19 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
+/* 
 ProductNewForm.propTypes = {
   isEdit: PropTypes.bool,
   currentProduct: PropTypes.object,
-};
+}; */
 
 
-export default function ProductNewForm({ isEdit, currentProduct }) {
+export default function ProductNewForm() {
 
 
   const [tradechecked, settradeChecked] = useState(false);
+
+  const isEdit = false;
 
   const navigate = useNavigate();
 
@@ -126,7 +128,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     displacement: Yup.number().moreThan(1, '배기량을 입력해주세요.').lessThan(10000,'배기량을 알맞게 입력해주세요.').nullable(),
   });
 
-  const defaultValues = useMemo(
+/*   const defaultValues = useMemo(
     () => ({
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
@@ -145,11 +147,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentProduct]
-  );
+  ); */
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
-    defaultValues,
+/*     defaultValues, */
     
   });
 
@@ -164,7 +166,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   } = methods;
 
   const values = watch();
-
+/* 
   useEffect(() => {
     if (isEdit && currentProduct) {
       reset(defaultValues);
@@ -174,7 +176,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentProduct]);
-
+ */
   const onSubmit = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -218,15 +220,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     const accessToken = window.localStorage.getItem('accessToken');
     const formData = new FormData();
     const config = {
-      header: {
+      headers: {
         "content-type": "multipart/form-data",
-        authorization :accessToken
+        Authorization :accessToken
       },
     };
     formData.append("file", acceptedFiles[0]);
     console.log(acceptedFiles[0]);
 
-    await axios.post("http://localhost:8080/api/image/upload", formData, config).then((res) => {
+    await axios.post("http://localhost:8080/api/s3/image", formData, config).then((res) => {
       console.log(res);
       setimg(res)
       console.log(img)
