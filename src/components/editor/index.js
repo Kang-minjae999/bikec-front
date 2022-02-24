@@ -78,17 +78,17 @@ export default function Editor({
       formData.append('imageFile', file);
       if (file !== null) {
         try {
-          await axios.post('http://localhost:8080/api/s3/image' , formData , {
+/*           await axios.post('http://localhost:8080/api/s3/image' , formData , {
             headers: {
               'content-type': 'multipart/form-data',
               Authorization: accessToken,
             }
           })
-          .then((responseData) => {
-            const data = responseData.data.data;
+          .then((response) => {
+            const data = response.data.data;
             seturl(data);
-          });
-/*           const response = await axios.post('/api/s3/image', formData, {
+          }); */
+         const response = await axios.post('/api/s3/image', formData, {
             headers: {
               'content-type': 'multipart/form-data',
               // enctype: 'multipart/form-data',
@@ -97,16 +97,15 @@ export default function Editor({
               Authorization: accessToken,
             },
           });
-          if(response !== null && response !== undefined && response !== ''  )
-          seturl(response.data.data); */
-/*           
+          const imgurl = response.data.data
+              
           const editor = QuillRef.current.getEditor(); 
           // 2. 현재 에디터 커서 위치값을 가져온다
           const range = editor.getSelection();
           // 가져온 위치에 이미지를 삽입한다
-          editor.insertEmbed(range.index, 'image', `${url}`);  */
+          editor.insertEmbed(range.index, 'image', `${imgurl}`);  
 
-          const range = QuillRef.current?.getEditor().getSelection()?.index;
+        /* const range = QuillRef.current?.getEditor().getSelection()?.index;
           if (range !== null && range !== undefined) {
             const quill = QuillRef.current?.getEditor();
 
@@ -117,7 +116,8 @@ export default function Editor({
               `<img src=${url} alt="이미지 태그가 삽입됩니다." />`
             );
           }
-        }
+        } */
+      }
         catch (error) {
           const err = error;
           return { ...err.response, success: false };
@@ -126,15 +126,6 @@ export default function Editor({
       return '';
     };
   };
-
- /*  useEffect(() => { 
-      const editor = QuillRef.current.getEditor(); 
-      // 2. 현재 에디터 커서 위치값을 가져온다
-      const range = editor.getSelection();
-      // 가져온 위치에 이미지를 삽입한다
-      editor.insertEmbed(range.index, 'image', `${url}`); 
-  }, [url]); */
-
 
   const modules = useMemo(() => ({
     toolbar: {

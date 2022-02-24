@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
+import axios from 'axios';
+
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, React, useState } from 'react';
@@ -9,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, Typography, Autocomplete, InputAdornment, FormControlLabel, Checkbox, TextField } from '@mui/material';
+import { Card, Chip, Grid, Stack, Typography, Autocomplete, InputAdornment, FormControlLabel, Checkbox, TextField, Button } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -21,7 +23,6 @@ import {
   RHFUploadMultiFile,
   RHFSwitch
 } from '../../../components/hook-form';
-
 // 바이크 중고거래 기준
 // ----------------------------------------------------------------------
 const CATEGORY_OPTION = 
@@ -199,6 +200,39 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     [setValue]
   );
 
+  const onclick = () => {
+    console.log(getValues('images'))
+  }
+
+  const [img, setimg] = useState([]);
+  const onDrop = useCallback(async (acceptedFiles) => {
+    setValue(
+      'images',
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      )
+    );
+
+    const accessToken = window.localStorage.getItem('accessToken');
+    const formData = new FormData();
+    const config = {
+      header: {
+        "content-type": "multipart/form-data",
+        authorization :accessToken
+      },
+    };
+    formData.append("file", acceptedFiles[0]);
+    console.log(acceptedFiles[0]);
+
+    await axios.post("http://localhost:8080/api/image/upload", formData, config).then((res) => {
+      console.log(res);
+      setimg(res)
+      console.log(img)
+    });
+  }, [setValue]);
+
 
   
   const handleChange = () => {
@@ -236,7 +270,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   showPreview
                   accept="image/*"
                   maxSize={3145728}
-                  onDrop={handleDrop}
+                  onDrop={onDrop}
                   onRemove={handleRemove}
                   onRemoveAll={handleRemoveAll}
                 />
@@ -423,6 +457,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
               {!isEdit ? '상품 올리기' : '상품 수정하기'}
             </LoadingButton>
+            <Button onClick={onclick}>
+              {!isEdit ? '상품 올리기' : '상품 수정하기'}
+            </Button>
           </Stack>
         </Grid>
       </Grid>

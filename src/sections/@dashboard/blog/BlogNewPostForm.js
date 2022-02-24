@@ -129,7 +129,7 @@ export default function BlogNewPostForm() {
                 <RHFTextField name="title" label="제목" />
                 <div>
                   <LabelStyle>내용</LabelStyle>
-                  <RHFEditor name="content" />
+                  <RHFTextField name="content" label='내용'/>
                 </div>
               </Stack>
             </Card>

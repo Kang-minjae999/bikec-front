@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
+import { useMemo } from 'react';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
@@ -7,7 +9,6 @@ import { Box } from '@mui/material';
 import BlockContent from './BlockContent';
 import RejectionFiles from './RejectionFiles';
 import MultiFilePreview from './MultiFilePreview';
-
 // ----------------------------------------------------------------------
 
 const DropZoneStyle = styled('div')(({ theme }) => ({
