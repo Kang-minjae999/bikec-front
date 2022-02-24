@@ -18,17 +18,18 @@ import ProductNewForm from '../../sections/@dashboard/e-commerce/ProductNewForm'
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductCreate() {
-  const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
+  const { themeStretch } = useSettings();/* 
+  const dispatch = useDispatch(); */
   const { pathname } = useLocation();
-  const { name } = useParams();
-  const { products } = useSelector((state) => state.product);
-  const isEdit = pathname.includes('edit');
-  const currentProduct = products.find((product) => paramCase(product.name) === name);
+  const { name } = useParams();/* 
+  const { products } = useSelector((state) => state.product); */
+  const isEdit = pathname.includes('edit');/* 
+  const currentProduct = products.find((product) => paramCase(product.name) === name); */
+  const currentProduct = []
 
-  useEffect(() => {
+/*   useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch]);
+  }, [dispatch]); */
 
   return (
     <Page title="Ecommerce: Create a new product">
