@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import { useMemo, useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 //
-import axios from '../../utils/axios';
+/* import axios from '../../utils/axios'; */
 import EditorToolbar, { formats, redoChange, undoChange } from './EditorToolbar';
 
 // ----------------------------------------------------------------------
